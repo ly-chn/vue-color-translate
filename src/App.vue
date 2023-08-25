@@ -19,7 +19,7 @@ const translatedColor = computed(()=>{
   <div>
     请选择颜色代码: <input type="color" v-model="targetColor">
     或输入颜色代码: <input type="text" v-model="targetColor">
-    <br>
+    <div style="height: 20px"></div>
     <table>
       <thead>
       <tr>
@@ -47,6 +47,6 @@ table{
 
 td{
   border: 1px solid darkgrey;
-  width: 200px;
+  width: 300px;
 }
 </style>
