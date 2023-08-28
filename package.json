@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build-ghp": "vite build --base=/vue-color-translate-demo/",
+    "build-ghp": "vite build --base=/vue-color-translate/",
     "preview": "vite preview"
   },
   "dependencies": {
