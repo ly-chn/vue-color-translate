@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "build": "vite build",
+    "build-ghp": "vite build --base=/vue-color-translate-demo/",
     "preview": "vite preview"
   },
   "dependencies": {
