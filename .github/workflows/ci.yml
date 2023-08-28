@@ -1,38 +1,51 @@
-# 该workflow的名称
-name: Build And Deploy To Github Pages
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
 
-# workflow的触发事件，这里代表main分支的push事件触发
 on:
+  # Runs on pushes targeting the default branch
   push:
-    branches: [ main ]
+    branches: ['main']
 
-# 任务
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
 jobs:
-  build-and-deploy:
-    # 运行所需要的环境
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-
     steps:
-      # 步骤名
       - name: Checkout
-        # 使用的actions脚本，这里是官方提供的获取源码脚本
-        uses: actions/checkout@v2.3.1
-        # 这个为使用 JamesIves/github-pages-deploy-action脚本所需要的配置
+        uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v3
         with:
-          persist-credentials: false
-
-      # 执行npm脚本打包项目
-      - name: Install and Build
-        run: |
-          npm install
-          npm run build-ghp
-
-      # 执行JamesIves/github-pages-deploy-action将项目发布到Github Pages
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+          node-version: 18
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          # 发布到的分支
-          BRANCH: gh-pages
-          # 要发布的文件夹
-          FOLDER: dist
+          # Upload dist repository
+          path: './dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
