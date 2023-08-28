@@ -1,28 +1,25 @@
 export class LyColor {
+  // red
   private readonly r: number
+  // green
   private readonly g: number
+  // blue
   private readonly b: number
+  // alpha
   private readonly a: number
 
-  constructor(color: string | [r: number, g: number, b: number, a: number]) {
-    if (typeof color !== 'string') {
-      const [r = 0, g = 0, b = 0, a = 255] = color
-      this.r = +r
-      this.g = +g
-      this.b = +b
-      this.a = +a
-    } else {
-      const div = document.createElement('div')
-      document.body.appendChild(div)
-      div.style.color = color
-      const computedColor = window.getComputedStyle(div).color
-      document.body.removeChild(div)
-      const [r = 0, g = 0, b = 0, a = 255] = computedColor.match(/(\d+%?)/g) ?? []
-      this.r = +r
-      this.g = +g
-      this.b = +b
-      this.a = +a
-    }
+  constructor(color: string) {
+    const div = document.createElement('div')
+    document.body.appendChild(div)
+    div.style.color = color
+    const computedColor = window.getComputedStyle(div).color
+    document.body.removeChild(div)
+    console.log(computedColor)
+    const [r = 0, g = 0, b = 0, a = 1] = computedColor.match(/\d+(\.\d+)?/g) ?? []
+    this.r = +r
+    this.g = +g
+    this.b = +b
+    this.a = +a
   }
 
   toHex() {
@@ -30,15 +27,15 @@ export class LyColor {
   }
 
   toHexA() {
-    return `#${LyColor.#hex(this.r)}${LyColor.#hex(this.g)}${LyColor.#hex(this.b)}${LyColor.#hex(this.a)}`
+    return `#${LyColor.#hex(this.r)}${LyColor.#hex(this.g)}${LyColor.#hex(this.b)}${LyColor.#hex(Math.round(this.a * 255))}`
   }
 
   toRGB() {
-    return `rgb(${this.r}, ${this.g}, ${this.b})`
+    return `rgb(${this.r} ${this.g} ${this.b})`
   }
 
   toRGBA() {
-    return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`
+    return `rgba(${this.r} ${this.g} ${this.b} / ${this.a})`
   }
 
   toHSL() {
